@@ -34,7 +34,7 @@ async def on_chat_start():
 async def on_settings_update(settings):
     cl.user_session.set("model", settings["Model"])
 
-async def sendToLLM(modelID: str, messages: list, stream: bool = False, msgUI: cl.Message = None, maxTokens: int = None):
+async def sendToLLM(modelID: str, messages: list, stream: bool = False, prntUI: cl.Message = None, maxTokens: int = None):
     backupModel = "groq/llama-3.1-8b-instant"
 
     try:
@@ -49,8 +49,8 @@ async def sendToLLM(modelID: str, messages: list, stream: bool = False, msgUI: c
 
 Rerouting to backup...""")
 
-        if stream and msgUI:
-            await msgUI.stream_token("An error occurred, rerouting to fallback model...\n")
+        if stream and prntUI:
+            await prntUI.stream_token("An error occurred, rerouting to fallback model...\n")
 
         response = await acompletion(
             model=backupModel,
@@ -59,9 +59,9 @@ Rerouting to backup...""")
             max_tokens=maxTokens
         )
 
-    if stream and msgUI:
+    if stream and prntUI:
         async for chunk in response:
-            await msgUI.stream_token(chunk.choices[0].delta.content)
+            await prntUI.stream_token(chunk.choices[0].delta.content)
         return None
     else:
         return response.choices[0].message.content.strip()
@@ -97,19 +97,23 @@ async def on_message(message: cl.Message):
         await cl.Message(content = "Guadrail triggered! This request was flagged and I cannot help with this request.").send()
         return
 
-    msg = cl.Message(content = "")
-    await msg.send()
+    prnt = cl.Message(content = "")
+    await prnt.send()
 
-    safeMessages = [
-        {"role": "system", "content": "You are a helpful, respectful, and safe AI assistant."},
-        {"role": "user", "content": message.content}
-    ]
+    messageHistory = cl.user_session.get("messageHistory")
+    if not messageHistory:
+        messageHistory = [{"role": "system", "content": "You are a helpful, respectful, and safe AI assistant."}]
+
+    messageHistory.append({"role": "user", "content": message.content})
 
     await sendToLLM(
         modelID = MODEL_MAP[model],
-        messages = safeMessages,
+        messages = messageHistory,
         stream = True,
-        msgUI = msg
+        prntUI = prnt
     )
 
-    await msg.update()
+    await prnt.update()
+
+    messageHistory.append({"role": "assistant", "content": prnt.content})
+    cl.user_session.set("messageHistory", messageHistory)
