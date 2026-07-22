@@ -1,0 +1,6 @@
+/* Force dark theme and hide theme toggle button */
+button[aria-label*="theme" i],
+button[id*="theme" i],
+.mode-toggle {
+    display: none !important;
+}

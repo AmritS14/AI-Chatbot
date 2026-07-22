@@ -1,6 +1,6 @@
-# Welcome to Your AI Assistant 🚀🤖
+# Welcome to Aarvian AI 🚀🤖
 
-Hi there! 👋 I am an advanced, AI-powered chatbot designed to help you with your tasks. 
+Hi there! 👋 I'm **Aarvian AI** — your intelligent assistant powered by cutting-edge AI technology. 
 
 ## Features 🌟
 
