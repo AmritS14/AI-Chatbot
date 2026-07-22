@@ -119,9 +119,3 @@ async def on_message(message: cl.Message):
 
     messageHistory.append({"role": "assistant", "content": prnt.content})
     cl.user_session.set("messageHistory", messageHistory)
-
-# Workaround for Hugging Face Gradio Spaces
-if __name__ == "__main__":
-    # Simulate running 'chainlit run app.py --port 7860'
-    sys.argv = ["chainlit", "run", "app.py", "--port", "7860"]
-    chainlit.cli.main()
