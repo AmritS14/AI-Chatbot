@@ -1,6 +1,6 @@
 # AI-Powered Chatbot
 
-A flexible, scalable AI chatbot application built for the AI/ML Internship Program evaluation. This project allows users to interact with multiple Large Language Models (LLMs), featuring real-time streaming, built-in safety guardrails, and robust error handling.
+A flexible, scalable AI chatbot application, this project allows users to interact with multiple Large Language Models (LLMs), featuring real-time streaming, built-in safety guardrails, and robust error handling.
 
 ## Features
 
@@ -14,7 +14,7 @@ A flexible, scalable AI chatbot application built for the AI/ML Internship Progr
 
 * **Frontend/UI**: [Chainlit](https://chainlit.io/) - A powerful framework for creating chat interfaces.
 * **LLM Orchestration**: [LiteLLM](https://litellm.vercel.app/) - A unified interface to call 100+ LLM APIs using the OpenAI format.
-* **Providers**: Groq (for fast inference) and OpenRouter (for a wide variety of open-source models).
+* **Providers**: Gemini, Groq and OpenRouter (for a wide variety of open-source models).
 * **Environment Management**: `python-dotenv` for secure API key handling.
 
 ## Architecture
@@ -74,7 +74,3 @@ Follow these steps to run the chatbot on your local machine:
    chainlit run app.py -w
    ```
    *The `-w` flag enables auto-reloading if you make code changes.*
-
-## Deployment Note (Hugging Face Spaces)
-
-This application is configured to run out-of-the-box on Hugging Face Spaces using the Gradio SDK. The `app.py` script automatically detects direct execution and launches the Chainlit server on the required port (`7860`).
