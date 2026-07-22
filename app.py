@@ -2,7 +2,8 @@ from dotenv import load_dotenv
 from litellm import acompletion, RateLimitError, APIConnectionError
 import chainlit as cl
 from chainlit.input_widget import Select
-from traceloop.sdk.guardrail import Guardrails
+import sys
+import chainlit.cli
 
 load_dotenv()
 
@@ -44,20 +45,21 @@ async def sendToLLM(modelID: str, messages: list, stream: bool = False, prntUI: 
             stream = stream,
             max_tokens = maxTokens
         )
-    except Exception as e:
-        print(f"""API failed: ({e})
-
-Rerouting to backup...""")
-
+    except RateLimitError as e:
+        print(f"RateLimitError: {e}")
         if stream and prntUI:
-            await prntUI.stream_token("An error occurred, rerouting to fallback model...\n")
-
-        response = await acompletion(
-            model=backupModel,
-            messages=messages,
-            stream=stream,
-            max_tokens=maxTokens
-        )
+            await prntUI.stream_token("\n\n **Error**: We've hit the rate limit for this model. Rerouting to a faster fallback model...\n\n")
+        response = await acompletion(model=backupModel, messages=messages, stream=stream, max_tokens=maxTokens)
+    except APIConnectionError as e:
+        print(f"APIConnectionError: {e}")
+        if stream and prntUI:
+            await prntUI.stream_token("\n\n **Error**: The model service appears to be down or unreachable. Rerouting to a stable fallback model...\n\n")
+        response = await acompletion(model=backupModel, messages=messages, stream=stream, max_tokens=maxTokens)
+    except Exception as e:
+        print(f"Unexpected API failure: ({e})")
+        if stream and prntUI:
+            await prntUI.stream_token(f"\n\n️ **Error**: An unexpected error occurred. Rerouting to fallback model...\n\n")
+        response = await acompletion(model=backupModel, messages=messages, stream=stream, max_tokens=maxTokens)
 
     if stream and prntUI:
         async for chunk in response:
@@ -117,3 +119,9 @@ async def on_message(message: cl.Message):
 
     messageHistory.append({"role": "assistant", "content": prnt.content})
     cl.user_session.set("messageHistory", messageHistory)
+
+# Workaround for Hugging Face Gradio Spaces
+if __name__ == "__main__":
+    # Simulate running 'chainlit run app.py --port 7860'
+    sys.argv = ["chainlit", "run", "app.py", "--port", "7860"]
+    chainlit.cli.main()
