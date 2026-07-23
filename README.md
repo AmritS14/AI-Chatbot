@@ -4,7 +4,7 @@ A flexible, scalable AI chatbot application, this project allows users to intera
 
 ## Features
 
-* **Multi-Model Support**: Easily switch between top-tier open-source models (Llama 3, Gemma, etc.) via the UI.
+* **Multi-Model Support**: Easily switch between top-tier open-source models (GPT-OSS, Gemma, etc.) via the UI.
 * **Smart Error Handling**: Automatically detects API token limits or service outages and seamlessly routes the request to a reliable fallback model.
 * **Safety Guardrails**: Analyzes user input to prevent the bot from assisting with unsafe or unethical requests.
 * **Real-time Streaming**: Provides a fast, interactive experience by streaming token responses.
