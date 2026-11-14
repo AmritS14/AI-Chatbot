@@ -1,12 +1,12 @@
-# Welcome to Aarvian AI 🚀🤖
+# Welcome to AI Chatbot
 
-Hi there! 👋 I'm **Aarvian AI** — your intelligent assistant powered by cutting-edge AI technology. 
+Explore multiple language models in one chat interface.
 
-## Features 🌟
+- Choose a model from the chat settings.
+- Read responses as they stream.
+- Continue a conversation with session-based history.
+- Receive a fallback response when a model service fails.
 
-- **Multiple Models**: Choose from state-of-the-art models like Llama 3 or Gemma right from the settings.
-- **Real-time Streaming**: Get responses instantly as they are generated.
-- **Safety First**: Built-in guardrails ensure safe and respectful interactions.
-- **Robust Error Handling**: Automatically routes to a fallback model if a primary service experiences issues.
+Inputs are screened by a basic safety check. Responses may still be inaccurate; verify important information.
 
-To get started, **select a model from the settings menu (bottom left)** and type your query below! 👇
+Select a model and type a message to get started.
